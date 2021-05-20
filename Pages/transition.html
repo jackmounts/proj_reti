@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting</title>
+</head>
+<body>
+  <p>Registration was successful. Redirecting....</p>
+  <script type="text/javascript">
+      function sleep(ms) {
+        return new Promise(function(res,rej) {
+            setTimeout(function(){res()}, ms);
+        })
+}
+      async function change() {
+          await(sleep(1000));
+          window.location.replace("http://127.0.0.1:8080/Pages/login.html");
+      }
+
+      change();
+  </script>
+</body>
+</html>

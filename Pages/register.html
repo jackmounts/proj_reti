@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
+        <style>
+            body, html {
+                width: 100%;
+                height: 100%;
+            }
+
+            body, p {
+                color: #6b747b;
+                font: 400 1rem/1.625rem "Open Sans", sans-serif;
+                text-align: center;
+            }
+
+            p2 {
+                font-size: 3rem;
+                text-align: center;
+                padding: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <br>
+        <p2> Iscrizione ai Servizi Sanitari DISI </p2>
+        <br>
+        <br>
+        <form method="post">
+            <div class="container">
+                <label for="register_name"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" id="register_name" name="register_name" required> <br>
+                <label for="register_psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" id="register_psw" name="register_psw" required> <br>
+                <input type="submit" value="Register">
+            </div>
+        </form>
+        <p> Sei già registrato/a? <a href="../Pages/login.html">Fai il login qui!</a>
+    </body>
+</html>
