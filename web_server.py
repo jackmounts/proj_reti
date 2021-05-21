@@ -212,7 +212,6 @@ class ServerHandler(http.server.SimpleHTTPRequestHandler):
                     return http.server.SimpleHTTPRequestHandler.do_GET(self)
                 else:
                     create_login_with_warning()
-                    create_register_no_warning()
                     self.path = "../Pages/login.html"
                     return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
@@ -231,7 +230,6 @@ class ServerHandler(http.server.SimpleHTTPRequestHandler):
                     return http.server.SimpleHTTPRequestHandler.do_GET(self)
                 else:
                     create_register_with_warning()
-                    create_login_no_warning()
                     self.path = "../Pages/register.html"
                     return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
