@@ -119,39 +119,40 @@ register_warning = """
 <p style="color: red">L'utente esiste già, prova a fare il Login!</p>
 """
 
+# transition page header
+transition_before_ip = """
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting</title>
+</head>
+<body>
+  <p>Registration was successful. Redirecting....</p>
+  <script type="text/javascript">
+      function sleep(ms) {
+        return new Promise(function(res,rej) {
+            setTimeout(function(){res()}, ms);
+        })
+}
+      async function change() {
+          await(sleep(1000));
+          window.location.replace("http://
+"""
+
+# Transition page after ip
+transition_after_ip = """/Pages/login.html");
+      }
+
+      change();
+  </script>
+"""
+
 # Useful for pages ends
 page_end = """
     </body>
 </html>
 """
-
-
-# Creates a login.html page without warning
-def create_login_no_warning():
-    f = open('Pages/login.html', 'w', encoding="utf-8")
-    f.write(login_header + "<br>" + page_end)
-    f.close()
-
-
-# Creates a login.html page with a warning
-def create_login_with_warning():
-    f = open('Pages/login.html', 'w', encoding="utf-8")
-    f.write(login_header + "<br>" + login_warning + "<br>" + page_end)
-    f.close()
-
-
-# Creates a register.html page without warning
-def create_register_no_warning():
-    f = open('Pages/register.html', 'w', encoding="utf-8")
-    f.write(register_header + "<br>" + page_end)
-    f.close()
-
-
-# Creates a register.html page with a warning
-def create_register_with_warning():
-    f = open('Pages/register.html', 'w', encoding="utf-8")
-    f.write(register_header + "<br>" + register_warning + "<br>" + page_end)
-    f.close()
 
 
 # Simplest user authenticator that saves and reads users and passwords from the .users file
@@ -211,6 +212,7 @@ class ServerHandler(http.server.SimpleHTTPRequestHandler):
                     return http.server.SimpleHTTPRequestHandler.do_GET(self)
                 else:
                     create_login_with_warning()
+                    create_register_no_warning()
                     self.path = "../Pages/login.html"
                     return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
@@ -223,11 +225,13 @@ class ServerHandler(http.server.SimpleHTTPRequestHandler):
                                           form.getvalue("register_psw")):
                     print("User " + form.getvalue("register_name") + " is trying to register with password: "
                           + form.getvalue("register_psw"))
+                    create_transition_page()
                     self.path = "../Pages/transition.html"
                     create_register_no_warning()
                     return http.server.SimpleHTTPRequestHandler.do_GET(self)
                 else:
                     create_register_with_warning()
+                    create_login_no_warning()
                     self.path = "../Pages/register.html"
                     return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
@@ -241,9 +245,44 @@ class ServerHandler(http.server.SimpleHTTPRequestHandler):
 # (or defaulted to 8080)
 # Should you want to change from localhost access to a network based local server change the ip variable
 # to your device ip
-ip = '127.0.0.1'
+ip = "127.0.0.1"
 server = socketserver.ThreadingTCPServer((ip, port), ServerHandler)
 print("Server is up and running at " + ip + ":" + str(port))
+full_address = ip + ":" + str(port)
+
+
+# Creates a login.html page without warning
+def create_login_no_warning():
+    f = open('Pages/login.html', 'w', encoding="utf-8")
+    f.write(login_header + "<br>" + page_end)
+    f.close()
+
+
+# Creates a login.html page with a warning
+def create_login_with_warning():
+    f = open('Pages/login.html', 'w', encoding="utf-8")
+    f.write(login_header + "<br>" + login_warning + "<br>" + page_end)
+    f.close()
+
+
+# Creates a register.html page without warning
+def create_register_no_warning():
+    f = open('Pages/register.html', 'w', encoding="utf-8")
+    f.write(register_header + "<br>" + page_end)
+    f.close()
+
+
+# Creates a register.html page with a warning
+def create_register_with_warning():
+    f = open('Pages/register.html', 'w', encoding="utf-8")
+    f.write(register_header + "<br>" + register_warning + "<br>" + page_end)
+    f.close()
+
+
+# Creates a simple transition page that redirects to login.html
+def create_transition_page():
+    f = open('Pages/transition.html', 'w', encoding="utf-8")
+    f.write(transition_before_ip.rstrip() + str(full_address).strip() + transition_after_ip.rstrip() + "<br>" + page_end)
 
 
 # Closes server on running termination or on ctrl+c
